@@ -21,7 +21,6 @@ class PokemonController {
 
   }
 
-
   async paginate({ request, response }) {
     try {
       let pagination = request.only(['page', 'limit'])
@@ -41,11 +40,12 @@ class PokemonController {
   async search({ request, response }) {
 
 		try {
-      const { name_poke,name_category } = request.only(['name_poke', 'name_category'])
+      const { name_poke,category_id } = request.only(['name_poke', 'category_id'])
 			const pokemon = await Pokemon.query()
                                     .with('category')
                                     .with('types')
                                     .where("name_poke", "LIKE", "%" + name_poke + "%")
+                                    .orWhere("category_id", "LIKE", category_id)
                                     .orderBy("id", "asc")
                                     .limit(10)
                                     .fetch();
